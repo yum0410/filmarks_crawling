@@ -1,4 +1,7 @@
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 import os
 import sys
 import pandas as pd
@@ -23,9 +26,15 @@ if __name__ == '__main__':
     driver.find_elements_by_link_text('動画配信サービスで探す')[0].location_once_scrolled_into_view
     driver.find_elements_by_link_text('動画配信サービスで探す')[0].click()
     driver.find_elements_by_link_text('Amazon Prime Videoで鑑賞できる映画')[0].click()
+    
+    time.sleep(1)
 
-    # TODO #2 ページ読み込みが完了するまでプロセスを停止させる ※driver.implicitly_wait(120)では止まらない
-    driver.implicitly_wait(120)
+    driver.get("https://filmarks.com/list/vod")
+    element = WebDriverWait(driver, 10).until(
+	    EC.visibility_of_element_located((By.LINK_TEXT, 'Amazon Prime Videoで鑑賞できる映画'))
+    movies = WebDriverWait(driver, 60).until(
+	    EC.visibility_of_element_located((By.CLASS_NAME, 'p-contents-grid'))
+    ).find_elements_by_class_name("js-movie-cassette")
     movies_info = []
     try:
         movies = driver.find_elements_by_class_name("js-movie-cassette")
