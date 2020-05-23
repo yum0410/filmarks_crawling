@@ -7,10 +7,15 @@ import sys
 import pandas as pd
 from tqdm import tqdm
 import time
+import urllib.request
 
 
 def get_movie_elements(movie):
     movie_info = {}
+
+    img_url = movie.find_element_by_class_name("p-content-cassette__jacket").find_element_by_tag_name("img").get_attribute("src")
+    movie_info["img_url"] = img_url
+
     class_names = [x.get_attribute("class") for x in movie.find_element_by_class_name("p-content-cassette__info__main").find_elements_by_tag_name("div")]
     for class_name in class_names:
         if class_name == "p-content-cassette__action__body":
@@ -50,6 +55,15 @@ def get_movie_elements(movie):
                         movie_info["actor"] = [name.text for name in c.find_elements_by_tag_name("ul")]
     movie_info["best_reviews"] = [x.text for x in movie.find_elements_by_class_name("p-content-cassette__review__text")]
     return movie_info
+
+
+def get_img_file_name(img_url):
+    return "".join(img_url.split("/")[-2:])
+
+
+def download_img(img_url, save_path):
+    img_name = get_img_file_name(img_url)
+    urllib.request.urlretrieve(img_url, os.path.join(save_path, img_name))
 
 
 def get_movies_info(crawling_page_num=1):
@@ -93,5 +107,14 @@ if __name__ == '__main__':
     ).click()
     movies_info = crawling(5)
     movies_info = pd.DataFrame(movies_info)
-    movies_info.to_csv("./movies_info.csv", encoding="utf-8-sig")
-        # TODO #1 続きを見る　の先もクローリング
+
+    SAVE_PATH = "./results/"
+    os.makedirs(SAVE_PATH, exist_ok=True)
+
+    # download image file
+    movies_info["img_url"] = movies_info["img_url"].apply(get_img_file_name)
+    for img_url in tqdm(movies_info["img_url"]):
+        download_img(img_url, SAVE_PATH)
+
+    movies_info.to_csv(os.path.join(SAVE_PATH, "movies_info.csv"), encoding="utf-8-sig")
+    # TODO #1 続きを見る　の先もクローリング
