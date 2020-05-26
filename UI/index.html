@@ -1,0 +1,96 @@
+  
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Filmark_crawler</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="main.css">
+
+  <!-- Load required Bootstrap and BootstrapVue CSS -->
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
+
+  <style>
+    .select,
+    #locale {
+      width: 100%;
+    }
+    .like {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+
+    <table 
+    data-toggle="table"
+    data-flat="true"
+    data-search="true">
+        <thead>
+            <tr>
+            <th>タイトル</th>
+            <th data-sortable="true">評価</th>
+            <th data-sortable="true">上映日</th>
+            <th data-sortable="true">上映時間</th>
+            <th data-sortable="true">制作国</th>
+            <th data-sortable="true">ジャンル</th>
+            <th data-sortable="true">視聴形態</th>
+            <th data-sortable="true">監督</th>
+            <th data-sortable="true">脚本</th>
+            <th data-sortable="true">出演者</th> 
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="item in items" @click="select(item.name)">
+                <th data-sortable="true">{{ item.title }}</th>
+                <th data-sortable="true">{{ item.rate }}</th>
+                <th data-sortable="true">{{ item.release_date }}</th>
+                <th data-sortable="true">{{ item.show_time }}</th>
+                <th data-sortable="true">{{ item.country }}</th>
+                <th data-sortable="true">{{ item.genre }}</th>
+                <th data-sortable="true">{{ item.how_to_see }}</th>
+                <th data-sortable="true">{{ item.directer }}</th>
+                <th data-sortable="true">{{ item.writer }}</th>
+                <th data-sortable="true">{{ item.actor }}</th>
+            </tr>
+
+            <tr>
+                <th>ライフ・イズ・ビューティフル</th>
+                <th data-sortable="true">4.2</th>
+                <th data-sortable="true">1999年04月17日</th>
+                <th data-sortable="true">117分</th>
+                <th data-sortable="true">イタリア</th>
+                <th data-sortable="true">"['ドラマ', '恋愛']"</th>
+                <th data-sortable="true">"['レンタル']"</th>
+                <th data-sortable="true">'ロベルト・ベニーニ'</th>
+                <th data-sortable="true">'ヴィンセンツォ・セラミ'</th>
+                <th data-sortable="true">'ロベルト・ベニーニニコレッタ・ブラスキ'</th> 
+            </tr>
+        </tbody>
+    </table>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+
+  <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table-locale-all.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+  <script src="main.js"></script>
+</body>
+</html>
