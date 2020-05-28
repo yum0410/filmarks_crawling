@@ -1,55 +1,47 @@
-// https://jp.vuejs.org/v2/examples/todomvc.html
-new Vue({
+var vm = new Vue({
     el: '#app',
     data: {
-        items: [
-          {
-            title: 'ライフ・イズ・ビューティフル',
-            rate: '4.2',
-            release_date: '1999年04月17日',
-            show_time: '117分',
-            country: 'イタリア',
-            genre: ['ドラマ', '恋愛'],
-            how_to_see: ['レンタル'],
-            directer: 'ロベルト・ベニーニ',
-            writer: 'ヴィンセンツォ・セラミ',
-            actor: 'ロベルト・ベニーニニコレッタ・ブラスキ'
-          },
-          {
-            title: 'b',
-            rate: 'b',
-            release_date: 'b',
-            show_time: 'b',
-            country: 'b',
-            genre: 'b',
-            how_to_see: 'b',
-            directer: 'b',
-            writer: 'b',
-            actor: `b`
-          },
-          {
-            title: 'c',
-            rate: 'c',
-            release_date: 'c',
-            show_time: 'c',
-            country: 'c',
-            genre: 'c',
-            how_to_see: 'c',
-            directer: 'c',
-            writer: 'c',
-            actor: `c`
-          }
-        ],
+      items: []
     },
+
+    created() {
+      // TODO csvからの読み込みだとカンマずれおきる,SQLでの対応に変更
+      var vm = this
+      var req = new XMLHttpRequest();
+      req.open("get", "../results/movies_info.csv", true);
+      req.send(null);
+      req.onload = function(){
+        var data = req.responseText;
+        let lines = data.split('\n');
+        lines.shift();
+        let lines_array = [];
+        for (let i=0; i < lines.length; i++) {
+          lines_array[i] = lines[i].split(",");
+        }
+        let movies_info = []
+        for (let i=0; i < lines_array.length; i++){
+          movies_info.push(
+            {
+              title: lines_array[i][10],
+              rate: lines_array[i][7],
+              release_date: lines_array[i][8],
+              show_time: lines_array[i][9],
+              country: lines_array[i][3],
+              genre: lines_array[i][5],
+              how_to_see: lines_array[i][6],
+              directer: lines_array[i][4],
+              actor: lines_array[i][1]
+            }
+          )  
+        }
+        vm.items = movies_info
+      }
+    },
+
     methods: {
         // TODO
-        // doCrawling: function(event) {
-        //     pass
-        // }
-
-        // TODO
-        // doLoadMovies: function(event) {
-        //     pass
-        // }
+        doCrawling: function(event) {
+            alert(this.items)
+        }
     }
 })
