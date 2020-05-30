@@ -3,45 +3,68 @@ var vm = new Vue({
     data: {
       items: []
     },
-
     created() {
-      // TODO csvからの読み込みだとカンマずれおきる,SQLでの対応に変更
       var vm = this
       var req = new XMLHttpRequest();
-      req.open("get", "../results/movies_info.csv", true);
+      req.open("get", "../results/movies_info.tsv", true);
       req.send(null);
       req.onload = function(){
         var data = req.responseText;
-        let lines = data.split('\n');
-        lines.shift();
-        let lines_array = [];
-        for (let i=0; i < lines.length; i++) {
-          lines_array[i] = lines[i].split(",");
-        }
+        const resultArray = vm.convertCsvToArray(data); 
+        vm.items = resultArray
         let movies_info = []
-        for (let i=0; i < lines_array.length; i++){
+        for (let row in resultArray) {
           movies_info.push(
             {
-              title: lines_array[i][10],
-              rate: lines_array[i][7],
-              release_date: lines_array[i][8],
-              show_time: lines_array[i][9],
-              country: lines_array[i][3],
-              genre: lines_array[i][5],
-              how_to_see: lines_array[i][6],
-              directer: lines_array[i][4],
-              actor: lines_array[i][1]
+              title: row["title"],
+              rate: row["rate"],
+              release_date: row["release_date"],
+              show_time: row["show_time"],
+              country: row["country"],
+              genre: row["genre"],
+              how_to_see: row["how_to_see"],
+              directer: row["directer"],
+              actor: row["actor"]
             }
-          )  
+          )
         }
-        vm.items = movies_info
       }
     },
-
     methods: {
-        // TODO
-        doCrawling: function(event) {
-            alert(this.items)
-        }
+      convertCsvToArray: function(csv) {
+        //header:CSV1行目の項目 :csvRows:項目に対する値
+        const [header, ...csvRows] = csv.split('\n').filter(function (row) {
+          if (row !== '') {
+            return row;
+          }
+        }).map(function (row) {
+          return row.split('\t');
+        });
+
+        let arrayInKeyAndValue;
+        let resultArray;
+        let tmpResultArray;
+    
+        tmpResultArray = csvRows.map(function (r) {
+          arrayInKeyAndValue = header.map(function (_, index) {
+            return ({key: header[index].replace(/\s+/g, ''), value: r[index]});
+          });
+          arrayInKeyAndValue = arrayInKeyAndValue.reduce(function (previous, current) {
+            previous[current.key] = current.value;
+            return previous;
+          }, {});
+          return arrayInKeyAndValue;
+        });
+    
+        resultArray = tmpResultArray.reduce(function (previous, current, index) {
+          previous[index] = current;
+          return previous;
+        }, {});
+        return resultArray;
+      },
+      // TODO
+      doCrawling: function(event) {
+          alert(this.items)
+      }
     }
 })

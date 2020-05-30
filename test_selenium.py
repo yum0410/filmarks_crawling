@@ -116,5 +116,5 @@ if __name__ == '__main__':
     for img_url in tqdm(movies_info["img_url"]):
         download_img(img_url, SAVE_PATH)
 
-    movies_info.to_csv(os.path.join(SAVE_PATH, "movies_info.csv"), encoding="utf-8-sig")
+    movies_info.to_csv(os.path.join(SAVE_PATH, "movies_info.tsv"), sep="\t", encoding="utf-8-sig")
     # TODO #1 続きを見る　の先もクローリング
