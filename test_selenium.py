@@ -112,7 +112,6 @@ if __name__ == '__main__':
     os.makedirs(SAVE_PATH, exist_ok=True)
 
     # download image file
-    movies_info["img_url"] = movies_info["img_url"].apply(get_img_file_name)
     for img_url in tqdm(movies_info["img_url"]):
         download_img(img_url, SAVE_PATH)
 
